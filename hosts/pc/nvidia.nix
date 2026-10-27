@@ -1,4 +1,4 @@
-# Solo para gráficas NVIDIA. Se activa descomentando la línea en flake.nix
+# Solo para gráficas NVIDIA. Se activa descomentando su import en hosts/pc/default.nix
 {
   hardware.graphics.enable = true;
   services.xserver.videoDrivers = [ "nvidia" ];
