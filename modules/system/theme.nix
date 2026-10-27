@@ -23,6 +23,14 @@ in
       dark = "kora";
     };
     fonts = {
+      sansSerif = {
+        name = "Noto Sans";
+        package = pkgs.noto-fonts;
+      };
+      serif = {
+        name = "Noto Serif";
+        package = pkgs.noto-fonts;
+      };
       monospace = {
         name = "JetBrainsMono Nerd Font";
         package = pkgs.nerd-fonts.jetbrains-mono;
