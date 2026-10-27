@@ -5,9 +5,14 @@
     awww
     grim
     slurp
+    satty # anotar capturas (lo más parecido a ShareX, que solo existe en Windows)
   ];
 
   programs.hyprlock.enable = true;
+
+  # Historial del portapapeles; se abre con Super+Shift+V
+  services.cliphist.enable = true;
+  programs.fuzzel.enable = true;
 
   wayland.windowManager.hyprland = {
     enable = true;
@@ -67,7 +72,11 @@
         "SUPER, V, togglefloating"
         "SUPER, L, exec, hyprlock"
         "SUPER SHIFT, E, exec, uwsm stop"
-        ", Print, exec, grim -g \"$(slurp)\" - | wl-copy"
+        "SUPER SHIFT, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
+
+        # Captura de zona / pantalla completa → satty para anotar, copiar o guardar
+        ", Print, exec, grim -g \"$(slurp)\" - | satty --filename - --copy-command wl-copy --early-exit"
+        "SHIFT, Print, exec, grim - | satty --filename - --copy-command wl-copy --early-exit"
 
         "SUPER, left, movefocus, l"
         "SUPER, right, movefocus, r"
