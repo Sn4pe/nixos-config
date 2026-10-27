@@ -1,29 +1,50 @@
 # nixos-config
 
-Flake mínima: NixOS unstable + home-manager + Hyprland (UWSM), es_ES / Europe/Madrid.
+NixOS unstable + home-manager + Hyprland (UWSM) con Noctalia y Catppuccin, es_ES / Europe/Madrid.
 Trozos sacados de [kadachi](https://git.rcia.dev/Avery/kadachi), marcados con `# De kadachi`.
 
-| Archivo | Qué hay |
-|---|---|
-| `flake.nix` | Entradas, nombre de usuario (`dfadon`) y hostname (`pc`) |
-| `configuration.nix` | Sistema: arranque, red, idioma, audio, Hyprland, login (tuigreet) |
-| `home.nix` | Tu usuario: Hyprland, waybar, kitty, fuzzel, Zed, Claude Code, Slack, Obsidian, Spotify, direnv |
-| `shells.nix` | Entornos por proyecto ocasional (`ml`) |
-| `nvidia.nix` | Driver NVIDIA + GPU en Docker. Desactivado: descomenta su línea en `flake.nix` |
-| `hardware-configuration.nix` | **No está aquí**: lo genera el instalador en cada PC |
+```
+flake.nix                 entradas, usuario (dfadon) y lista de máquinas
+hosts/pc/                 lo propio de esta máquina
+  default.nix             stateVersion e imports de hardware
+  nvidia.nix              driver NVIDIA + GPU en Docker (desactivado)
+  hardware-configuration.nix   NO está en git: lo genera el instalador
+modules/system/           sistema, común a todas las máquinas
+  base.nix                arranque, red, idioma
+  nix.nix                 flakes, nh, nix-ld
+  users.nix               tu usuario y zsh
+  desktop.nix             Hyprland, login, audio, Bluetooth
+  theme.nix               Stylix: Catppuccin oscuro + claro
+  dev.nix                 Docker
+modules/home/             tu usuario (home-manager)
+  apps.nix                Zed, Slack, Obsidian, Spotify, Chrome, utilidades, Syncthing
+  dev.nix                 Node 24, protoc, Claude Code, git, direnv
+  shell.nix               kitty, zsh, starship, alias
+  hyprland.nix            atajos, monitor, fondo, decoración
+  noctalia.nix            barra, lanzador, notificaciones
+  firefox.nix             uBlock, Bitwarden, sin telemetría
+  xdg.nix                 apps por defecto, carpetas en castellano
+shells/                   entornos por proyecto (ml)
+assets/                   fondo de pantalla
+```
+
+**Añadir algo**: busca el módulo que encaja, o crea uno nuevo y añádelo a los `imports`
+del `default.nix` de su carpeta. **Otra máquina**: copia `hosts/pc` a `hosts/portatil`
+y añade `nixosConfigurations.portatil = mkHost "portatil";` en `flake.nix`.
 
 ## Instalación
 
 1. Arranca la ISO **gráfica** de NixOS e instala con el asistente. Usuario `dfadon`
    y hostname `pc` (o los que quieras, pero cámbialos en `flake.nix`). Escritorio: "No desktop".
-2. Reinicia, entra por TTY y trae esta carpeta a `~/nixos-config` (git clone o USB):
+2. Reinicia, entra por TTY y clona el repo en `~/nixos-config`:
 
    ```bash
-   nix-shell -p git
-   cd ~/nixos-config
-   cp /etc/nixos/hardware-configuration.nix .
-   grep stateVersion /etc/nixos/configuration.nix   # copia ese valor en configuration.nix y home.nix
-   git init && git add -A                            # las flakes solo ven archivos que git conoce
+   nix-shell -p git gh
+   gh auth login
+   gh repo clone Sn4pe/nixos-config ~/nixos-config && cd ~/nixos-config
+   cp /etc/nixos/hardware-configuration.nix hosts/pc/
+   grep stateVersion /etc/nixos/configuration.nix   # si no es 26.05, cámbialo en hosts/pc y modules/home
+   git add -A                                        # las flakes solo ven archivos que git conoce
    sudo nixos-rebuild switch --flake .#pc --extra-experimental-features 'nix-command flakes'
    ```
 
@@ -33,8 +54,8 @@ A partir de ahí, después de cada cambio: `nh os switch` (no hace falta `sudo`)
 
 ## Shells por proyecto
 
-Lo de uso diario va global en `home.nix` (Node 24 y protoc para agentos). Lo de
-proyectos que tocas de vez en cuando vive en `shells.nix` y aparece solo dentro de su carpeta:
+Lo de uso diario va global en `modules/home/dev.nix` (Node 24 y protoc para agentos). Lo de
+proyectos que tocas de vez en cuando vive en `shells/` y aparece solo dentro de su carpeta:
 
 ```bash
 cd ~/proyectos/finetune
@@ -45,10 +66,10 @@ direnv allow
 Al entrar en la carpeta se carga solo; al salir, desaparece.
 `.envrc` está en el gitignore global, así que no lo subirás a repos ajenos.
 
-- **Proyecto nuevo**: copia un bloque en `shells.nix` con lo que necesite.
+- **Proyecto nuevo**: copia `shells/ml.nix` con otro nombre y añádelo en `shells/default.nix`.
 - **Algo puntual**, sin tocar nada: `nix shell nixpkgs#htop` o `nix develop ~/nixos-config#ml`.
 - **Fine-tuning**: shell `ml` (Python 3.12 + uv). `uv pip install torch` funciona gracias a
-  `nix-ld` y al `LD_LIBRARY_PATH` de la shell; con NVIDIA activa también `nvidia.nix`.
+  `nix-ld` y al `LD_LIBRARY_PATH` de la shell; con NVIDIA activa también `hosts/pc/nvidia.nix`.
 
 ## Atajos
 
@@ -68,6 +89,6 @@ Al entrar en la carpeta se carga solo; al salir, desaparece.
 
 ## Pendiente para más adelante (está en kadachi)
 
-- Tu nombre en git: `programs.git.settings.user.name` en `home.nix`.
+- Tu nombre en git: `programs.git.settings.user.name` en `modules/home/dev.nix`.
 - AutoFirma: `kasane/programs/autofirma.nix` (input `autofirma-nix`).
 - Secure Boot (lanzaboote) y kernel CachyOS: mejor cuando el sistema ya arranque bien.

@@ -10,7 +10,7 @@ in
     enable = true;
     base16Scheme = catppuccin "mocha";
     polarity = "dark";
-    image = ./assets/blossoms.jpg;
+    image = ../../assets/blossoms.jpg;
     cursor = {
       package = pkgs.phinger-cursors;
       name = "phinger-cursors-dark";
