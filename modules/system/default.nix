@@ -7,5 +7,6 @@
     ./desktop.nix
     ./theme.nix
     ./dev.nix
+    ./vpn.nix
   ];
 }

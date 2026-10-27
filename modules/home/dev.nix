@@ -5,6 +5,23 @@
     protobuf
     claude-code
     gh
+    # agentos: kubernetes/ con Terraform y minikube
+    kubectl
+    minikube
+    terraform
+    k9s
+    # Clientes de lo que levanta el docker compose de agentos
+    postgresql # psql
+    mongosh
+    redis # redis-cli
+    # Terminal
+    ripgrep
+    fd
+    jq
+    bat
+    eza
+    lazygit
+    lazydocker
   ];
 
   programs = {

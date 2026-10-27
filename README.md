@@ -16,11 +16,13 @@ modules/system/           sistema, común a todas las máquinas
   desktop.nix             Hyprland, login, audio, Bluetooth
   theme.nix               Stylix: Catppuccin oscuro + claro
   dev.nix                 Docker
+  vpn.nix                 OpenVPN para NetworkManager (VPN de AIR)
 modules/home/             tu usuario (home-manager)
   apps.nix                Zed, Slack, Obsidian, Spotify, Chrome, utilidades, Syncthing
-  dev.nix                 Node 24, protoc, Claude Code, git, direnv
+  dev.nix                 Node 24, protoc, kubectl, minikube, terraform, k9s, psql, mongosh,
+                          redis-cli, ripgrep, fd, jq, bat, eza, lazygit, lazydocker, git, direnv
   shell.nix               kitty, zsh, starship, alias
-  hyprland.nix            atajos, monitor, fondo, decoración
+  hyprland.nix            atajos, monitor, fondo, decoración, capturas, portapapeles
   noctalia.nix            barra, lanzador, notificaciones
   firefox.nix             uBlock, Bitwarden, sin telemetría
   xdg.nix                 apps por defecto, carpetas en castellano
@@ -51,6 +53,22 @@ y añade `nixosConfigurations.portatil = mkHost "portatil";` en `flake.nix`.
 3. Reinicia. Sale tuigreet; al entrar arranca Hyprland.
 
 A partir de ahí, después de cada cambio: `nh os switch` (no hace falta `sudo`).
+
+## VPN de AIR
+
+El `.ovpn` es personal y **no va al repo**. En el PC nuevo, una sola vez:
+
+1. Cópialo desde Windows (`Documentos/AIRInstitute_David-Fadón_air-openvpn.ovpn`) con un USB.
+2. Impórtalo y comprueba el nombre que le pone:
+
+   ```bash
+   nmcli connection import type openvpn file ~/Descargas/AIRInstitute_David-Fadón_air-openvpn.ovpn
+   nmcli connection show
+   ```
+
+3. Bórralo de Descargas: NetworkManager ya guarda su copia.
+
+Para conectar: icono de red en la bandeja de Noctalia, o `nmcli connection up <nombre>`.
 
 ## Shells por proyecto
 
@@ -85,7 +103,8 @@ Al entrar en la carpeta se carga solo; al salir, desaparece.
 | `Super + 1..0` / `+ Shift` | Ir a escritorio / mover ventana |
 | `Super + L` | Bloquear |
 | `Super + Shift + E` | Salir de Hyprland |
-| `Impr Pant` | Captura de zona al portapapeles |
+| `Impr Pant` / `Shift + Impr Pant` | Captura de zona / pantalla completa → satty (anotar, copiar, guardar) |
+| `Super + Shift + V` | Historial del portapapeles |
 
 ## Pendiente para más adelante (está en kadachi)
 
