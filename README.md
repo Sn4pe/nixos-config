@@ -19,8 +19,8 @@ modules/system/           sistema, común a todas las máquinas
   vpn.nix                 OpenVPN para NetworkManager (VPN de AIR)
 modules/home/             tu usuario (home-manager)
   apps.nix                Zed, Slack, Obsidian, Spotify, Chrome, utilidades, Syncthing
-  dev.nix                 Node 24, protoc, kubectl, minikube, terraform, k9s, psql, mongosh,
-                          redis-cli, ripgrep, fd, jq, bat, eza, lazygit, lazydocker, git, direnv
+  dev.nix                 Node 24, protoc, psql, mongosh, redis-cli, ripgrep, fd, jq,
+                          bat, eza, lazygit, lazydocker, git, direnv
   shell.nix               kitty, zsh, starship, alias
   hyprland.nix            atajos, monitor, fondo, decoración, capturas, portapapeles
   noctalia.nix            barra, lanzador, notificaciones
