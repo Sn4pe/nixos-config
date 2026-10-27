@@ -37,16 +37,56 @@ in
         position = "bottom_center";
       };
 
-      shell.polkit_agent = true;
+      shell = {
+        polkit_agent = true;
+        # Menú de Ctrl+Alt+Supr: apagar, reiniciar, bloquear, bloquear y suspender
+        session = {
+          grid = true;
+          grid_columns = 2;
+          actions = [
+            {
+              action = "shutdown";
+              countdown_seconds = 10.0;
+              enabled = true;
+              shortcut = "1";
+              variant = "destructive";
+            }
+            {
+              action = "reboot";
+              countdown_seconds = 10.0;
+              enabled = true;
+              shortcut = "2";
+              variant = "default";
+            }
+            {
+              action = "lock";
+              countdown_seconds = 0.0;
+              enabled = true;
+              shortcut = "3";
+              variant = "default";
+            }
+            {
+              action = "lock_and_suspend";
+              countdown_seconds = 3.0;
+              enabled = true;
+              shortcut = "4";
+              variant = "default";
+            }
+          ];
+        };
+      };
 
       wallpaper.enabled = false; # el fondo lo pone awww
 
-      widget.clock.format = "{:%H:%M}";
+      widget = {
+        clock.format = "{:%H:%M}";
+        tray.drawer = true; # iconos de la bandeja agrupados en un desplegable
+      };
     };
   };
 
   wayland.windowManager.hyprland.settings = {
-    exec-once = [ "noctalia" ];
+    exec-once = [ "uwsm app -- noctalia" ];
     bind = [
       "SUPER, D, exec, ${ipc} panel-toggle launcher"
       "SUPER, Space, exec, ${ipc} panel-toggle launcher"

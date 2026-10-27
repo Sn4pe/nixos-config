@@ -1,5 +1,8 @@
 # De kadachi (kasane/desktop/hyprland + kasane/theme), con teclado es en vez de dvorak
 { osConfig, pkgs, ... }:
+let
+  cursor = osConfig.stylix.cursor;
+in
 {
   home.packages = with pkgs; [
     awww
@@ -9,6 +12,29 @@
   ];
 
   programs.hyprlock.enable = true;
+
+  # Bloquea a los 10 min y apaga la pantalla a los 15; sin suspender (Docker/fine-tuning)
+  services.hypridle = {
+    enable = true;
+    settings = {
+      general = {
+        lock_cmd = "pidof hyprlock || hyprlock";
+        before_sleep_cmd = "loginctl lock-session";
+        after_sleep_cmd = "hyprctl dispatch dpms on";
+      };
+      listener = [
+        {
+          timeout = 600;
+          on-timeout = "loginctl lock-session";
+        }
+        {
+          timeout = 900;
+          on-timeout = "hyprctl dispatch dpms off";
+          on-resume = "hyprctl dispatch dpms on";
+        }
+      ];
+    };
+  };
 
   # Historial del portapapeles; se abre con Super+Shift+V
   services.cliphist.enable = true;
@@ -24,10 +50,13 @@
 
     settings = {
       # Monitor automático. Para fijarlo: "DP-1, 2560x1440@165, 0x0, 1"
+      # Monitor 4K: ", preferred, auto, 1.5" y xwayland.force_zero_scaling = true
       monitor = [ ", preferred, auto, 1" ];
 
+      # Las apps se lanzan con `uwsm app --` para que cada una tenga su propio servicio
       exec-once = [
-        "awww-daemon"
+        "hyprctl setcursor ${cursor.name} ${toString cursor.size}"
+        "uwsm app -- awww-daemon"
         "sleep 1 && awww img ${osConfig.stylix.image}"
       ];
 
@@ -53,9 +82,13 @@
         shadow.enabled = false;
       };
 
+      # Los 10 escritorios siempre visibles en la barra
+      workspace = builtins.genList (i: "${toString (i + 1)}, persistent:true") 10;
+
       misc = {
         disable_hyprland_logo = true;
         disable_splash_rendering = true;
+        middle_click_paste = false;
       };
 
       ecosystem = {
@@ -64,13 +97,13 @@
       };
 
       bind = [
-        "SUPER, Return, exec, kitty"
-        "SUPER, E, exec, pcmanfm-qt"
-        "SUPER, B, exec, firefox"
+        "SUPER, Return, exec, uwsm app -- kitty"
+        "SUPER, E, exec, uwsm app -- pcmanfm-qt"
+        "SUPER, B, exec, uwsm app -- firefox"
         "SUPER, Q, killactive"
         "SUPER, F, fullscreen"
         "SUPER, V, togglefloating"
-        "SUPER, L, exec, hyprlock"
+        "SUPER, L, exec, loginctl lock-session"
         "SUPER SHIFT, E, exec, uwsm stop"
         "SUPER SHIFT, V, exec, cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"
 

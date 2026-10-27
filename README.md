@@ -8,7 +8,7 @@ flake.nix                 entradas, usuario (dfadon) y lista de máquinas
 hosts/pc/                 lo propio de esta máquina
   default.nix             stateVersion e imports de hardware
   nvidia.nix              driver NVIDIA + GPU en Docker (desactivado)
-  hardware-configuration.nix   NO está en git: lo genera el instalador
+  hardware-configuration.nix   lo genera el instalador; súbelo a git (las flakes lo necesitan)
 modules/system/           sistema, común a todas las máquinas
   base.nix                arranque, red, idioma
   nix.nix                 flakes, nh, nix-ld
@@ -46,11 +46,27 @@ y añade `nixosConfigurations.portatil = mkHost "portatil";` en `flake.nix`.
    gh repo clone Sn4pe/nixos-config ~/nixos-config && cd ~/nixos-config
    cp /etc/nixos/hardware-configuration.nix hosts/pc/
    grep stateVersion /etc/nixos/configuration.nix   # si no es 26.05, cámbialo en hosts/pc y modules/home
+   nix-shell -p pciutils --run "lspci | grep -iE 'vga|3d'"   # ¿NVIDIA? descomenta nvidia.nix en hosts/pc
    git add -A                                        # las flakes solo ven archivos que git conoce
    sudo nixos-rebuild switch --flake .#pc --extra-experimental-features 'nix-command flakes'
    ```
 
-3. Reinicia. Sale tuigreet; al entrar arranca Hyprland.
+   NVIDIA anterior a RTX 20xx: pon `open = false` en `hosts/pc/nvidia.nix`.
+
+3. Reinicia (también hace falta para que `docker` funcione sin sudo). Sale tuigreet; al entrar arranca Hyprland.
+4. Sube `flake.lock` y `hosts/pc/hardware-configuration.nix`:
+
+   ```bash
+   git add -A && git commit -m "chore: add lock and hardware config" && git push
+   ```
+
+### Comprobar el primer día
+
+- `docker compose version`: si falla, añade `pkgs.docker-compose` a `modules/home/dev.nix`.
+- Una llamada de prueba en Slack compartiendo pantalla.
+- Gráfica Intel: para vídeo acelerado en el navegador, `hardware.graphics.extraPackages = [ pkgs.intel-media-driver ];` en `hosts/pc/default.nix`.
+- Si el icono de red (VPN) no sale en la bandeja: `systemctl --user restart nm-applet`.
+- `gh auth login` y `ssh-keygen` para GitHub; git ya usa la sesión de `gh` para HTTPS.
 
 A partir de ahí, después de cada cambio: `nh os switch` (no hace falta `sudo`).
 
@@ -101,7 +117,7 @@ Al entrar en la carpeta se carga solo; al salir, desaparece.
 | `tema-claro` / `tema-oscuro` | Catppuccin Latte / Mocha (en la terminal) |
 | `Super + Q` | Cerrar ventana |
 | `Super + 1..0` / `+ Shift` | Ir a escritorio / mover ventana |
-| `Super + L` | Bloquear |
+| `Super + L` | Bloquear (también solo a los 10 min; pantalla apagada a los 15) |
 | `Super + Shift + E` | Salir de Hyprland |
 | `Impr Pant` / `Shift + Impr Pant` | Captura de zona / pantalla completa → satty (anotar, copiar, guardar) |
 | `Super + Shift + V` | Historial del portapapeles |
@@ -111,3 +127,5 @@ Al entrar en la carpeta se carga solo; al salir, desaparece.
 - Tu nombre en git: `programs.git.settings.user.name` en `modules/home/dev.nix`.
 - AutoFirma: `kasane/programs/autofirma.nix` (input `autofirma-nix`).
 - Secure Boot (lanzaboote) y kernel CachyOS: mejor cuando el sistema ya arranque bien.
+- Tema claro también en Noctalia: la specialisation `claro` solo cambia Stylix (GTK, Qt, kitty…);
+  Noctalia se cambia desde su panel de ajustes.
