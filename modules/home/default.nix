@@ -17,4 +17,8 @@
   };
 
   programs.home-manager.enable = true;
+
+  # No usamos rofi; el target de Stylix aún define el obsoleto `programs.rofi.font`
+  # y genera un warning en cada evaluación.
+  stylix.targets.rofi.enable = false;
 }

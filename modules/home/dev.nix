@@ -1,9 +1,8 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   home.packages = with pkgs; [
     nodejs_24 # agentos pide >= 22; sus Dockerfiles usan node:22
     protobuf
-    claude-code
     # Módulos nativos de npm (node-gyp)
     python3
     gcc
@@ -24,6 +23,11 @@
   ];
 
   programs = {
+    # Instala claude-code y le registra los servidores MCP (plugin "hm")
+    claude-code = {
+      enable = true;
+      mcpServers.nixos.command = lib.getExe pkgs.mcp-nixos;
+    };
     git = {
       enable = true;
       settings = {
