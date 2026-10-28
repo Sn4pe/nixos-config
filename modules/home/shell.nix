@@ -28,8 +28,6 @@
       '';
       shellAliases = {
         rbd = "nh os switch";
-        tema-claro = "sudo /nix/var/nix/profiles/system/specialisation/claro/bin/switch-to-configuration test";
-        tema-oscuro = "sudo /nix/var/nix/profiles/system/bin/switch-to-configuration test";
       };
     };
 

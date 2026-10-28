@@ -4,7 +4,7 @@ let
 in
 {
   # Chrome/Firefox reescriben este archivo al hacerse navegador por defecto; sin force,
-  # el siguiente `nh os switch` (o tema-claro) falla con "would be clobbered"
+  # el siguiente `nh os switch` falla con "would be clobbered"
   xdg.configFile."mimeapps.list".force = true;
   xdg.mimeApps = {
     enable = true;
