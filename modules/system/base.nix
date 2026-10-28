@@ -19,6 +19,10 @@
   time.timeZone = "Europe/Madrid";
   i18n.defaultLocale = "es_ES.UTF-8";
   console.keyMap = "es";
+  # Sin manual de NixOS (nixos-help): se consulta en la web o con el MCP de NixOS, y ahorra tiempo en cada rebuild
+  documentation.nixos.enable = false;
+  # Distribución por defecto del sistema (localectl, apps X11); Hyprland usa la suya en input.kb_layout
+  services.xserver.xkb.layout = "es";
 
   # Firmware de Wi-Fi/Bluetooth/GPU y actualizaciones de BIOS/SSD con `fwupdmgr update`
   hardware.enableRedistributableFirmware = true;
