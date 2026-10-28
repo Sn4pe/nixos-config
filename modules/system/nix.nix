@@ -1,4 +1,4 @@
-{ pkgs, user, ... }:
+{ pkgs, ... }:
 {
   nix = {
     settings = {
@@ -23,7 +23,7 @@
       dates = "weekly";
       extraArgs = "--keep-since 14d";
     };
-    flake = "/home/${user}/nixos-config";
+    flake = "/etc/nixos";
   };
 
   # Ejecuta binarios precompilados (protoc de npm, wheels de Python, servidores de lenguaje de Zed)

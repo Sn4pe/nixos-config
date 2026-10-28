@@ -9,6 +9,12 @@
       url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Repo privado con lo que no debe ir a este repo público (inventario OCS de AIR).
+    # Como kadachi con kadachi-secrets; se descarga con la sesión de `gh`
+    secrets = {
+      url = "git+https://github.com/sn4pe/nixos-secrets";
+      flake = false;
+    };
   };
 
   outputs =
@@ -17,7 +23,7 @@
       home-manager,
       stylix,
       ...
-    }:
+    }@inputs:
     let
       # Cambia esto si al instalar eliges otro usuario
       user = "dfadon";
@@ -27,7 +33,7 @@
         hostName:
         nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
-          specialArgs = { inherit user hostName; };
+          specialArgs = { inherit inputs user hostName; };
           modules = [
             ./hosts/${hostName}
             ./modules/system
@@ -46,7 +52,7 @@
         };
     in
     {
-      nixosConfigurations.pc = mkHost "pc";
+      nixosConfigurations.AIR231 = mkHost "AIR231";
 
       devShells.x86_64-linux = import ./shells { pkgs = nixpkgs.legacyPackages.x86_64-linux; };
     };
