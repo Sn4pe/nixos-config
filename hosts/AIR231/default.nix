@@ -4,6 +4,8 @@
   imports = [
     ./hardware-configuration.nix # lo genera el instalador: cp /etc/nixos/hardware-configuration.nix hosts/AIR231/
     ./nvidia.nix # RTX 4080
+    ./data.nix # segundo NVMe en /data
+    ./ollama.nix
     "${inputs.secrets}/AIR231/inventory.nix" # agente OCS de AIR; está en el repo privado
   ];
 
