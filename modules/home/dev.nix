@@ -1,4 +1,37 @@
 { lib, pkgs, ... }:
+let
+  # programs.git.hooks fija un core.hooksPath global que tapa .git/hooks de cada repo:
+  # cada hook de aquí ejecuta también el del repo, si lo tiene
+  repoHook = name: ''
+    repo_hook="$(git rev-parse --git-common-dir)/hooks/${name}"
+    if [ -x "$repo_hook" ]; then "$repo_hook" "$@" || exit $?; fi
+  '';
+  hookNames = [
+    "applypatch-msg"
+    "pre-applypatch"
+    "post-applypatch"
+    "pre-commit"
+    "pre-merge-commit"
+    "prepare-commit-msg"
+    "post-commit"
+    "pre-rebase"
+    "post-checkout"
+    "post-merge"
+    "pre-push"
+    "post-rewrite"
+    "pre-auto-gc"
+    "reference-transaction"
+    "push-to-checkout"
+    "post-index-change"
+    "sendemail-validate"
+  ];
+  # Quita la atribución de IA (Co-Authored-By de Claude, "Generated with Claude Code"),
+  # también en los commits que no hace Claude
+  commitMsg = pkgs.writeShellScript "git-commit-msg" ''
+    ${lib.getExe pkgs.gnused} -i -E '/^co-authored-by:.*(claude|anthropic)/Id; /generated with \[?claude code/Id' "$1"
+    ${repoHook "commit-msg"}
+  '';
+in
 {
   home.packages = with pkgs; [
     nodejs_24 # agentos pide >= 22; sus Dockerfiles usan node:22
@@ -35,6 +68,10 @@
         init.defaultBranch = "main";
         fetch.prune = true; # de kadachi (kasane/programs/git)
       };
+      hooks = {
+        commit-msg = commitMsg;
+      }
+      // lib.genAttrs hookNames (name: pkgs.writeShellScript "git-${name}" (repoHook name));
       # Para no subir por error el .envrc a repos que no son tuyos (agentos)
       ignores = [
         ".envrc"
