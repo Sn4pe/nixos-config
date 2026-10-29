@@ -2,7 +2,6 @@
 {
   nix = {
     settings = {
-      auto-optimise-store = true;
       experimental-features = [
         "nix-command"
         "flakes"
@@ -12,6 +11,8 @@
     # De kadachi (megurine/is/desktop): que un rebuild no congele el escritorio ni las llamadas
     daemonCPUSchedPolicy = "idle";
     daemonIOSchedClass = "idle";
+    # Deduplicar el store una vez por semana en vez de en cada build (auto-optimise-store frena los rebuilds)
+    optimise.automatic = true;
   };
   nixpkgs.config.allowUnfree = true;
 

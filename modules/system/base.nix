@@ -8,6 +8,8 @@
     };
     efi.canTouchEfiVariables = true;
   };
+  # /tmp está en disco: que no se acumulen restos de builds y descargas entre arranques
+  boot.tmp.cleanOnBoot = true;
 
   networking = {
     inherit hostName;
@@ -36,7 +38,10 @@
   };
   services.btrfs.autoScrub = {
     enable = true;
-    fileSystems = [ "/" ];
+    fileSystems = [
+      "/"
+      "/data"
+    ];
   };
 
   # Que los logs (Docker incluido) no crezcan sin límite
@@ -47,13 +52,14 @@
     enable = true;
     memoryPercent = 50;
   };
+  # Si se acaba la RAM, oomd mata lo que más presiona de la sesión antes de que se congele el escritorio
+  systemd.oomd.enableUserSlices = true;
 
   environment.systemPackages = with pkgs; [
     git
     wl-clipboard
     pciutils # lspci
     usbutils # lsusb
-    htop
     ncdu
     file
     unzip
