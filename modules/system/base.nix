@@ -28,6 +28,20 @@
   hardware.enableRedistributableFirmware = true;
   services.fwupd.enable = true;
 
+  # Salud de los discos: aviso en el escritorio si SMART detecta fallos, y scrub mensual
+  # de btrfs para encontrar corrupción silenciosa
+  services.smartd = {
+    enable = true;
+    notifications.systembus-notify.enable = true;
+  };
+  services.btrfs.autoScrub = {
+    enable = true;
+    fileSystems = [ "/" ];
+  };
+
+  # Que los logs (Docker incluido) no crezcan sin límite
+  services.journald.settings.Journal.SystemMaxUse = "1G";
+
   # Swap comprimida en RAM (Docker + fine-tuning)
   zramSwap = {
     enable = true;
