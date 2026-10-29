@@ -11,6 +11,17 @@
     hyprlock.enable = true;
     noctalia.enable = true;
   };
+  # Sin la espera de 2 s de pam_unix tras fallar: en el bloqueo se puede reintentar al momento
+  security.pam.services.hyprlock.nodelay = true;
+  # Un suspend dejó colgada la NVIDIA al volver y se perdió la sesión. Además Docker/fine-tuning no deben parar:
+  # la tecla de suspender solo bloquea y el sistema no se suspende ni hiberna por ningún camino
+  services.logind.settings.Login.HandleSuspendKey = "lock";
+  systemd.sleep.settings.Sleep = {
+    AllowSuspend = "no";
+    AllowHibernation = "no";
+    AllowHybridSleep = "no";
+    AllowSuspendThenHibernate = "no";
+  };
 
   # Slack, Chrome, Obsidian… en Wayland nativo: nítidos con escalado y compartir pantalla funciona
   environment.sessionVariables.NIXOS_OZONE_WL = "1";
