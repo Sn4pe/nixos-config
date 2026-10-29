@@ -8,5 +8,6 @@
     ./theme.nix
     ./dev.nix
     ./vpn.nix
+    ./tailscale.nix
   ];
 }

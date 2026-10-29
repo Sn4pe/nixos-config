@@ -9,6 +9,10 @@ in
     settings = {
       audio.enable_sounds = false;
 
+      # Del catálogo community: Tailscale (equipos de la tailnet).
+      # Esto solo lo marca: la primera vez hay que descargarlo con `noctalia msg plugins enable <id>`
+      plugins.enabled = [ "rylos/tailnet" ];
+
       bar.default = {
         enabled = true;
         position = "top";
@@ -20,19 +24,53 @@ in
           "workspaces"
         ];
         center = [ "active_window" ];
+        widget_spacing = 10;
+        # A la derecha, cada bloque en su cápsula para que no quede todo pegado
         end = [
           "media"
-          "cpu"
-          "gpu"
-          "ram"
-          "caffeine"
-          "notifications"
-          "tray"
-          "bluetooth"
-          "volume"
-          "date"
-          "clock"
+          "group:sys"
+          "group:svc"
+          "group:ctl"
+          "group:time"
         ];
+        capsule_group =
+          map
+            (g: {
+              inherit (g) id members;
+              padding = 8.0;
+              widget_spacing = 8;
+            })
+            [
+              {
+                id = "sys";
+                members = [
+                  "cpu"
+                  "gpu"
+                  "ram"
+                ];
+              }
+              {
+                id = "svc";
+                members = [ "rylos/tailnet:bar" ];
+              }
+              {
+                id = "ctl";
+                members = [
+                  "caffeine"
+                  "notifications"
+                  "tray"
+                  "bluetooth"
+                  "volume"
+                ];
+              }
+              {
+                id = "time";
+                members = [
+                  "date"
+                  "clock"
+                ];
+              }
+            ];
       };
 
       theme.builtin = "Catppuccin";
@@ -87,6 +125,9 @@ in
 
       widget = {
         clock.format = "{:%H:%M}";
+        # Que el título del centro no choque con la música
+        active_window.max_length = 200.0;
+        media.max_length = 160.0;
         gpu = {
           type = "sysmon";
           stat = "gpu_usage";
