@@ -85,16 +85,15 @@ in
     };
   };
 
-  wayland.windowManager.hyprland.settings = {
-    exec-once = [ "uwsm app -- noctalia" ];
-    bind = [
-      "SUPER, D, exec, ${ipc} panel-toggle launcher"
-      "SUPER, Space, exec, ${ipc} panel-toggle launcher"
-      "CTRL ALT, Delete, exec, ${ipc} panel-toggle session"
-    ];
-    bindle = [
-      ", XF86MonBrightnessUp, exec, ${ipc} brightness-up"
-      ", XF86MonBrightnessDown, exec, ${ipc} brightness-down"
-    ];
-  };
+  wayland.windowManager.hyprland.extraLuaFiles.noctalia = ''
+    hl.on("hyprland.start", function()
+      hl.exec_cmd("uwsm app -- noctalia")
+    end)
+
+    hl.bind("SUPER + D", hl.dsp.exec_cmd("${ipc} panel-toggle launcher"))
+    hl.bind("SUPER + Space", hl.dsp.exec_cmd("${ipc} panel-toggle launcher"))
+    hl.bind("CTRL + ALT + Delete", hl.dsp.exec_cmd("${ipc} panel-toggle session"))
+    hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("${ipc} brightness-up"), { locked = true, repeating = true })
+    hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("${ipc} brightness-down"), { locked = true, repeating = true })
+  '';
 }
