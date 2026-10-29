@@ -90,6 +90,11 @@ in
       enableDefaultConfig = false;
       settings."*".AddKeysToAgent = "yes";
     };
+    # Variante CUDA: muestra también la RTX 4080 (uso, VRAM, temperatura)
+    btop = {
+      enable = true;
+      package = pkgs.btop-cuda;
+    };
     # Al entrar en una carpeta con .envrc carga su shell de Nix (ver shells/)
     direnv = {
       enable = true;
