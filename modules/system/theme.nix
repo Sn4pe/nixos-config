@@ -58,7 +58,7 @@ in
     enable = true;
     base16Scheme = catppuccin "latte";
     polarity = "light";
-    image = ../../assets/blossoms.jpg;
+    image = ../../assets/wallpapers/ascii/ascii-magic-1.jpg;
     cursor = {
       package = pkgs.phinger-cursors;
       name = "phinger-cursors-light";

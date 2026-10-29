@@ -1,7 +1,12 @@
 # De kadachi (kasane/desktop/hyprland + kasane/theme), con teclado es en vez de dvorak
 # Config en Lua (hyprlang está obsoleto desde 0.55): opciones, monitores y escritorios como
 # atributos de Nix (hl.config/hl.monitor/hl.workspace_rule); binds y autoarranque en .lua
-{ osConfig, pkgs, ... }:
+{
+  osConfig,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cursor = osConfig.stylix.cursor;
 
@@ -21,6 +26,55 @@ let
   left = "desc:Microstep MSI MP273A PB4H603502628";
   right = "desc:Microstep MSI MP273A PB4H603502614";
 
+  # Fondos por modo: cada subcarpeta de assets/wallpapers es un modo, y `todos` las mezcla
+  wallpapers = ../../assets/wallpapers;
+  modes = builtins.attrNames (lib.filterAttrs (_: type: type == "directory") (builtins.readDir wallpapers));
+  modeFile = ''"''${XDG_STATE_HOME:-$HOME/.local/state}/wallpaper-mode"'';
+
+  # Un fondo al azar del modo activo en cada monitor
+  wallpaper = pkgs.writeShellApplication {
+    name = "wallpaper-rotate";
+    runtimeInputs = with pkgs; [
+      awww
+      jq
+      findutils
+      coreutils
+      osConfig.programs.hyprland.package
+    ];
+    text = ''
+      mode=$(cat ${modeFile} 2>/dev/null || echo todos)
+      dir=${wallpapers}/$mode
+      [ "$mode" != todos ] && [ -d "$dir" ] || dir=${wallpapers}
+      # Al iniciar sesión awww-daemon puede no estar listo todavía
+      for _ in $(seq 20); do awww query >/dev/null 2>&1 && break; sleep 0.5; done
+      for out in $(hyprctl monitors -j | jq -r '.[].name'); do
+        img=$(find "$dir" -type f -iname '*.jpg' | shuf -n 1)
+        awww img -o "$out" --transition-type fade "$img"
+      done
+    '';
+  };
+
+  # `wallpaper-mode` dice el modo activo; `wallpaper-mode ascii` lo cambia y aplica al momento
+  wallpaperMode = pkgs.writeShellApplication {
+    name = "wallpaper-mode";
+    runtimeInputs = [ pkgs.coreutils ];
+    text = ''
+      if [ $# -eq 0 ]; then
+        cat ${modeFile} 2>/dev/null || echo todos
+        exit
+      fi
+      case "$1" in
+        todos | ${lib.concatStringsSep " | " modes}) ;;
+        *)
+          echo "Modo desconocido: $1. Disponibles: todos ${toString modes}" >&2
+          exit 1
+          ;;
+      esac
+      mkdir -p "$(dirname ${modeFile})"
+      echo "$1" > ${modeFile}
+      ${wallpaper}/bin/wallpaper-rotate
+    '';
+  };
 in
 {
   home.packages = with pkgs; [
@@ -28,6 +82,7 @@ in
     grim
     slurp
     satty # anotar capturas (lo más parecido a ShareX, que solo existe en Windows)
+    wallpaperMode
   ];
 
   programs.hyprlock.enable = true;
@@ -53,6 +108,26 @@ in
         }
       ];
     };
+  };
+
+  # Cambia el fondo al entrar en la sesión y cada 30 min, dentro del modo de `wallpaper-mode`
+  systemd.user.services.wallpaper-rotate = {
+    Unit = {
+      Description = "Fondo de pantalla al azar";
+      After = [ "graphical-session.target" ];
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${wallpaper}/bin/wallpaper-rotate";
+    };
+  };
+  systemd.user.timers.wallpaper-rotate = {
+    Unit.PartOf = [ "graphical-session.target" ];
+    Timer = {
+      OnActiveSec = "2s";
+      OnUnitActiveSec = "30min";
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
   };
 
   # Historial del portapapeles; se abre con Super+Shift+V
@@ -142,7 +217,6 @@ in
         hl.on("hyprland.start", function()
           hl.exec_cmd("hyprctl setcursor ${cursor.name} ${toString cursor.size}")
           hl.exec_cmd("uwsm app -- awww-daemon")
-          hl.exec_cmd("sleep 1 && awww img ${osConfig.stylix.image}")
         end)
       '';
 
