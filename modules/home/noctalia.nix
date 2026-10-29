@@ -1,4 +1,4 @@
-# De kadachi (kasane/desktop/noctalia): barra a la izquierda, notificaciones, lanzador y menú de apagado
+# De kadachi (kasane/desktop/noctalia): barra arriba, notificaciones, lanzador y menú de apagado
 { osConfig, ... }:
 let
   ipc = "noctalia msg";
@@ -11,7 +11,7 @@ in
 
       bar.default = {
         enabled = true;
-        position = "left";
+        position = "top";
         background_opacity = osConfig.stylix.opacity.terminal;
         margin_edge = 8;
         margin_ends = 8;
@@ -19,11 +19,18 @@ in
           "launcher"
           "workspaces"
         ];
-        center = [ ];
+        center = [ "active_window" ];
         end = [
+          "media"
+          "cpu"
+          "gpu"
+          "ram"
+          "caffeine"
+          "notifications"
           "tray"
           "bluetooth"
           "volume"
+          "date"
           "clock"
         ];
       };
@@ -80,6 +87,10 @@ in
 
       widget = {
         clock.format = "{:%H:%M}";
+        gpu = {
+          type = "sysmon";
+          stat = "gpu_usage";
+        };
         tray.drawer = true; # iconos de la bandeja agrupados en un desplegable
       };
     };
