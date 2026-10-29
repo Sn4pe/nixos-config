@@ -175,6 +175,18 @@ in
         default = i == 0 || i == 5;
       }) 10;
 
+      # Apps con escritorio fijo: Slack en el 6 (derecha), Spotify en el 10
+      window_rule = [
+        {
+          match.class = "^(slack)$";
+          workspace = "6";
+        }
+        {
+          match.class = "^(spotify)$";
+          workspace = "10";
+        }
+      ];
+
       config = {
         input = {
           kb_layout = "es";

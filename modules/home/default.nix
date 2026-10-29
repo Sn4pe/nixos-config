@@ -2,6 +2,7 @@
 {
   imports = [
     ./apps.nix
+    ./animations.nix
     ./claude-desktop.nix
     ./dev.nix
     ./shell.nix
