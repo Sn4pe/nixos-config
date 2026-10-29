@@ -146,7 +146,6 @@ Al entrar en la carpeta se carga solo; al salir, desaparece.
 
 - Tu nombre en git: `programs.git.settings.user.name` en `modules/home/dev.nix`.
 - AutoFirma: `kasane/programs/autofirma.nix` (input `autofirma-nix`).
-- Secure Boot (lanzaboote) y kernel CachyOS: mejor cuando el sistema ya arranque bien.
 - Atajos tipo Mac (`Super` = `Cmd`): `Super+Tab`, `Super+W`, `Super+M/H` (ocultar), `Super+,` (ajustes de Noctalia),
   `Super+Alt+Esc` (forzar cierre), `Super+Ctrl+←/→` (escritorios), scroll natural; capturas con
   `Super+Shift+3/4` (habría que mover "mover ventana" a `Super+Alt+número`) y `Super+C/V` en kitty.
