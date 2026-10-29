@@ -2,6 +2,7 @@
 {
   imports = [
     ./apps.nix
+    ./claude-desktop.nix
     ./dev.nix
     ./shell.nix
     ./hyprland.nix
