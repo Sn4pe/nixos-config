@@ -1,7 +1,6 @@
 { pkgs, ... }:
 {
   home.packages = with pkgs; [
-    zed-editor
     slack
     obsidian
     spotify
@@ -20,6 +19,9 @@
     mpv
     pavucontrol
   ];
+
+  # Con el módulo (y no en home.packages) Stylix le pone colores y fuentes, y cambia con `theme`
+  programs.zed-editor.enable = true;
 
   services.syncthing.enable = true; # panel en http://localhost:8384
 }
