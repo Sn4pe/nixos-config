@@ -10,6 +10,11 @@
     modelsDir = "/data/ollama/models";
     user = "ollama";
     group = "ollama";
+    # Caché de contexto en q8 (la mitad de VRAM que f16): más contexto y gemma4 entero en los 16 GB
+    environmentVariables = {
+      OLLAMA_FLASH_ATTENTION = "1";
+      OLLAMA_KV_CACHE_TYPE = "q8_0";
+    };
   };
   systemd.tmpfiles.rules = [ "d /data/ollama/models 0755 ollama ollama -" ];
   # Sin el disco de datos montado, que no arranque (si no, descargaría los modelos en el disco del sistema)
