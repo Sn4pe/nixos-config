@@ -9,9 +9,13 @@ in
     settings = {
       audio.enable_sounds = false;
 
-      # Del catálogo community: Tailscale (equipos de la tailnet).
-      # Esto solo lo marca: la primera vez hay que descargarlo con `noctalia msg plugins enable <id>`
-      plugins.enabled = [ "rylos/tailnet" ];
+      # Del catálogo community: Tailscale (equipos de la tailnet) y uso de Claude (límites de 5 h y semanal).
+      # Esto solo los marca: la primera vez hay que descargarlos con `noctalia msg plugins enable <id>`.
+      # claudecode lee ~/.claude/.credentials.json y renueva el token si caduca
+      plugins.enabled = [
+        "rylos/tailnet"
+        "jrohland/claudecode"
+      ];
 
       bar.default = {
         enabled = true;
@@ -27,7 +31,6 @@ in
         widget_spacing = 10;
         # A la derecha, cada bloque en su cápsula para que no quede todo pegado
         end = [
-          "media"
           "group:sys"
           "group:svc"
           "group:ctl"
@@ -51,7 +54,10 @@ in
               }
               {
                 id = "svc";
-                members = [ "rylos/tailnet:bar" ];
+                members = [
+                  "jrohland/claudecode:pill"
+                  "rylos/tailnet:bar"
+                ];
               }
               {
                 id = "ctl";
@@ -70,7 +76,25 @@ in
                   "clock"
                 ];
               }
+              # Solo los usa el monitor derecho
+              {
+                id = "apps";
+                members = [ "taskbar" ];
+              }
+              {
+                id = "music";
+                members = [ "media" ];
+              }
             ];
+        # Monitor derecho (Slack, Spotify, docs): sin estadísticas ni bandeja, que ya están a la izquierda.
+        # match por número de serie, como en hyprland.nix
+        monitor.secundario = {
+          match = "PB4H603502614";
+          start = [ "workspaces" ];
+          # active_window enseña la ventana con foco de cualquier monitor; taskbar solo las de este
+          center = [ "group:apps" ];
+          end = [ "group:music" ];
+        };
       };
 
       theme.builtin = "Catppuccin";
@@ -125,6 +149,10 @@ in
 
       widget = {
         clock.format = "{:%H:%M}";
+        "jrohland/claudecode:pill" = {
+          pill_metric = "both";
+          pill_extras = "countdown";
+        };
         # Que el título del centro no choque con la música
         active_window.max_length = 200.0;
         media.max_length = 160.0;
