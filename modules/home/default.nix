@@ -11,6 +11,7 @@
     ./noctalia.nix
     ./firefox.nix
     ./xdg.nix
+    ./vigilante.nix
   ];
 
   home = {
