@@ -17,16 +17,22 @@ in
       plugins.enabled = [
         "rylos/tailnet"
         "jrohland/claudecode"
-        "raycursive/github-prs" # usa la sesión de `gh`; no guarda tokens
-        "dfadon/agentos" # local, ver agentos-bar.nix
+        # Fork de raycursive/github-prs en ~/Projects/noctalia-plugins (github.com/Sn4pe/noctalia-plugins).
+        # Fuente: `noctalia msg plugins source add sn4pe path ~/Projects/noctalia-plugins`
+        "sn4pe/octobar" # usa la sesión de `gh`; no guarda tokens
+        "sn4pe/workbench" # local, ver workbench.nix
       ];
-      # PRs que te asignan, que esperan tu revisión y los tuyos, sin los proyectos personales
-      plugin_settings."raycursive/github-prs" = {
+      # PRs que te asignan, que esperan tu revisión, los tuyos y donde te mencionan, sin los proyectos personales
+      plugin_settings."sn4pe/octobar" = {
         rules = [
           "assignee:@me"
           "review-requested:@me"
           "author:@me"
+          "mentions:@me"
         ];
+        # Publica como usuario, no como bot
+        ignored_authors = [ "agentos-bot" ];
+        tracked_branches."~/Projects/agentos" = "develop";
         # Comodines con *: con "/" casa con owner/repo, sin "/" solo con el nombre del repo
         excluded_repositories = [
           "bladetiers/*"
@@ -84,10 +90,10 @@ in
                 id = "dev";
                 members = [
                   "jrohland/claudecode:pill"
-                  "raycursive/github-prs:bar"
-                  "dfadon/agentos:develop"
-                  "dfadon/agentos:jira"
-                  "dfadon/agentos:docker"
+                  "sn4pe/octobar:bar"
+                  "sn4pe/octobar:develop"
+                  "sn4pe/workbench:jira"
+                  "sn4pe/workbench:docker"
                 ];
               }
               {
@@ -177,7 +183,7 @@ in
           pill_extras = "countdown";
         };
         media.max_length = 160.0;
-        "raycursive/github-prs:bar".hide_when_zero = true;
+        "sn4pe/octobar:bar".hide_when_zero = true;
         gpu = {
           type = "sysmon";
           stat = "gpu_usage";

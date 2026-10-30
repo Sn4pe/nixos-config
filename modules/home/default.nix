@@ -2,7 +2,7 @@
 {
   imports = [
     ./apps.nix
-    ./agentos-bar.nix
+    ./workbench.nix
     ./animations.nix
     ./claude-desktop.nix
     ./dev.nix
