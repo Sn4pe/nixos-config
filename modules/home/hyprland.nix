@@ -422,6 +422,8 @@ in
           disable_hyprland_logo = true;
           disable_splash_rendering = true;
           middle_click_paste = false;
+          # Al pulsar una notificación o un enlace, la app que pide el foco (Slack, Chrome) te lleva a su ventana
+          focus_on_activate = true;
         };
 
         ecosystem = {
