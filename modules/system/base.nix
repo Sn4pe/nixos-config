@@ -35,6 +35,8 @@
   services.smartd = {
     enable = true;
     notifications.systembus-notify.enable = true;
+    # Test corto cada noche a las 2 y largo los domingos a las 4
+    defaults.autodetected = "-a -s (S/../.././02|L/../../7/04)";
   };
   services.btrfs.autoScrub = {
     enable = true;

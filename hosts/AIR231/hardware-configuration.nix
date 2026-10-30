@@ -34,9 +34,10 @@
   fileSystems."/boot" = {
     device = "/dev/disk/by-label/boot";
     fsType = "vfat";
+    # Solo root: la semilla aleatoria de systemd-boot no debe ser legible por otros usuarios
     options = [
-      "fmask=0022"
-      "dmask=0022"
+      "fmask=0077"
+      "dmask=0077"
     ];
   };
 

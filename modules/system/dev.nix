@@ -9,6 +9,9 @@
       ip = "127.0.0.1";
       # Imágenes, volúmenes y caché de build en el NVMe de datos (~40 GB), no en el del sistema
       data-root = "/data/docker";
+      # Logs de contenedores en /data/docker con tope por contenedor: en journald arcadedb llenaba
+      # el 1G del journal y rotaba los arranques anteriores. `docker logs` sigue igual
+      log-driver = "local";
     };
   };
   # Sin /data montado, que no arranque (si no, empezaría de cero en el disco del sistema)
