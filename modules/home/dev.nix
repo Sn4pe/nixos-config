@@ -89,6 +89,8 @@ in
       enable = true;
       enableDefaultConfig = false;
       settings."*".AddKeysToAgent = "yes";
+      # Hosts de trabajo fuera del repo, en ~/.ssh/config.d/ (no versionado)
+      includes = [ "config.d/*" ];
     };
     # Variante CUDA: muestra también la RTX 4080 (uso, VRAM, temperatura)
     btop = {
