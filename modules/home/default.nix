@@ -12,6 +12,7 @@
     ./firefox.nix
     ./xdg.nix
     ./vigilante.nix
+    ./sprint.nix
   ];
 
   home = {
