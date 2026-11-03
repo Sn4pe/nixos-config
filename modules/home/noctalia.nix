@@ -32,6 +32,7 @@ in
         ];
         # Publica como usuario, no como bot
         ignored_authors = [ "agentos-bot" ];
+        clickable_notifications = true;
         tracked_branches."~/Projects/agentos" = "develop";
         # Comodines con *: con "/" casa con owner/repo, sin "/" solo con el nombre del repo
         excluded_repositories = [
@@ -91,7 +92,6 @@ in
                 members = [
                   "jrohland/claudecode:pill"
                   "sn4pe/octobar:bar"
-                  "sn4pe/octobar:develop"
                   "sn4pe/workbench:jira"
                   "sn4pe/workbench:docker"
                 ];

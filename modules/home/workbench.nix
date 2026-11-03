@@ -27,20 +27,25 @@ let
         local base=''${JIRA_BASE_URL%/}
         local jql='project = AGOS AND assignee = currentUser() AND statusCategory != Done ORDER BY updated DESC'
         local state="''${XDG_STATE_HOME:-$HOME/.local/state}/workbench/jira.json"
+        # PRs abiertos que publica sn4pe/octobar; con más de 15 min se ignoran para no enseñar un CI viejo
+        local prs="''${XDG_STATE_HOME:-$HOME/.local/state}/noctalia/plugins/data/sn4pe/octobar/prs.json"
         get() { timeout 15 curl -sf -G -H @<(printf 'Authorization: Bearer %s\n' "$JIRA_API_TOKEN") "$base/rest/api/2/$1" "''${@:2}"; }
 
         local result changes overflow='{}'
         result=$(get search --data-urlencode "jql=$jql" --data-urlencode fields=summary,status,priority \
           --data-urlencode maxResults=50 |
-          jq --arg base "$base" --arg url "$base/issues/?jql=$(jq -rn --arg q "$jql" '$q | @uri')" '
-            [.issues[] | {
+          jq --arg base "$base" --arg url "$base/issues/?jql=$(jq -rn --arg q "$jql" '$q | @uri')" \
+            --slurpfile o <(cat "$prs" 2>/dev/null || echo null) '
+            (($o[0] // {}) | if (.updatedAt // 0) > (now - 900) then (.prs // []) else [] end) as $prs
+            | [.issues[] | {
               key,
               summary: .fields.summary,
               status: .fields.status.name,
               category: .fields.status.statusCategory.key,
               priority: (.fields.priority.name // ""),
               url: "\($base)/browse/\(.key)"
-            }] as $i
+            } | .key as $k | .prs = [$prs[] | select("\(.title) \(.headRefName)" | ascii_upcase | test("\\b\($k)\\b"))
+                | {number, url, ci, reviewDecision, isDraft}]] as $i
             | {
               ok: true,
               active: [$i[] | select(.category == "indeterminate" and .status != "In Review")] | length,
@@ -188,7 +193,10 @@ let
           table.insert(events, 1, c)
           local what = c.kind == "assigned" and "Te lo han asignado" or `{c.from} -> {c.to}`
           local who = (c.actor or "") ~= "" and `{c.actor}: ` or ""
-          noctalia.notify(`{c.key} {c.summary}`, who .. what)
+          -- Con notify-send para que el clic abra el ticket; separado del servicio para que valga desde el historial
+          noctalia.runAsync({ "setsid", "-f", "sh", "-c",
+            'a=$(notify-send -a workbench -A default=Abrir "$1" "$2") && [ "$a" = default ] && exec xdg-open "$3"',
+            "sh", `{c.key} {c.summary}`, who .. what, c.url })
         end
         while #events > 50 do table.remove(events) end
         saveEvents()
@@ -200,13 +208,22 @@ let
         -- Por el PATH y no por la ruta del store: así un rebuild del script no obliga a reiniciar el servicio
         noctalia.runAsync("workbench-status", function(result)
           running = false
-          if result.timedOut or result.exitCode ~= 0 or result.stdoutTruncated then
+          local data = not (result.timedOut or result.exitCode ~= 0 or result.stdoutTruncated)
+            and noctalia.json.decode(result.stdout or "")
+          if type(data) ~= "table" then
             noctalia.log("workbench: workbench-status failed")
+            noctalia.state.set("jira_failed", true)
             return
           end
-          local data = noctalia.json.decode(result.stdout or "")
-          if type(data) ~= "table" then return end
-          noctalia.state.set("jira", data.jira)
+          -- Si Jira falla se queda lo anterior en pantalla, marcado como fallido
+          local jiraOk = type(data.jira) == "table" and data.jira.ok
+          noctalia.state.set("jira_failed", not jiraOk)
+          if jiraOk then
+            noctalia.state.set("updated", noctalia.formatTime("%H:%M"))
+            noctalia.state.set("jira", data.jira)
+          elseif noctalia.state.get("jira") == nil then
+            noctalia.state.set("jira", data.jira)
+          end
           noctalia.state.set("docker", data.docker)
           if type(data.jira) == "table" then addChanges(data.jira.changes) end
         end, 40000)
@@ -246,6 +263,15 @@ let
       local data = noctalia.state.get("jira")
       local events = noctalia.state.get("events") or {}
 
+      -- Bloqueado, o un PR enlazado con el CI roto o con cambios pedidos
+      local function needsAttention(issue)
+        if issue.status == "Bloqueado" then return true end
+        for _, pr in ipairs(issue.prs or {}) do
+          if pr.ci == "FAILURE" or pr.ci == "ERROR" or pr.reviewDecision == "CHANGES_REQUESTED" then return true end
+        end
+        return false
+      end
+
       local function render()
         local hasTickets = data and data.ok and (data.active > 0 or data.review > 0)
         if not hasTickets and #events == 0 then
@@ -253,8 +279,17 @@ let
           return
         end
         barWidget.setVisible(true)
+        local alert = false
+        local lines = {}
+        for _, issue in ipairs(hasTickets and data.issues or {}) do
+          if issue.category == "indeterminate" then
+            alert = alert or needsAttention(issue)
+            table.insert(lines, `{issue.key} · {issue.status}: {issue.summary}`)
+          end
+        end
+        barWidget.setTooltip(table.concat(lines, "\n"))
         local children = {
-          ui.glyph({ name = "ticket", size = 16, color = "on_surface" }),
+          ui.glyph({ name = "ticket", size = 16, color = alert and "error" or "on_surface" }),
           ui.label({ text = hasTickets and `{data.active} · {data.review} rev` or "0", color = "on_surface" }),
         }
         if #events > 0 then
