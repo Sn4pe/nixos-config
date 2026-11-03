@@ -1,6 +1,16 @@
-{ config, ... }:
+{ config, pkgs, ... }:
 let
   home = config.home.homeDirectory;
+
+  # Si Chrome ya está abierto, mete el enlace en su ventana sin pedir el foco: hay que ir a buscarla
+  open-link = pkgs.writeShellScript "open-link" ''
+    ${pkgs.google-chrome}/bin/google-chrome-stable "$@" &
+    sleep 0.3
+    # Sin mover el ratón a la ventana: solo el foco
+    hyprctl eval 'hl.config({ cursor = { no_warps = true } })' >/dev/null
+    hyprctl dispatch 'hl.dsp.focus({ window = "class:google-chrome" })' >/dev/null
+    hyprctl eval 'hl.config({ cursor = { no_warps = false } })' >/dev/null
+  '';
 in
 {
   # Chrome/Firefox reescriben este archivo al hacerse navegador por defecto; sin force,
@@ -17,7 +27,20 @@ in
       "video/x-matroska" = "mpv.desktop";
       "video/webm" = "mpv.desktop";
       "application/pdf" = "firefox.desktop";
+      "x-scheme-handler/http" = "open-link.desktop";
+      "x-scheme-handler/https" = "open-link.desktop";
+      "text/html" = "open-link.desktop";
     };
+  };
+  xdg.desktopEntries.open-link = {
+    name = "Abrir enlace en Chrome";
+    exec = "${open-link} %U";
+    noDisplay = true;
+    mimeType = [
+      "x-scheme-handler/http"
+      "x-scheme-handler/https"
+      "text/html"
+    ];
   };
 
   # De kadachi (kasane/misc/spanish-xdg-user-dirs): carpetas del home en castellano
