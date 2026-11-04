@@ -1,5 +1,10 @@
 # De kadachi (kasane/desktop/noctalia): barra arriba, notificaciones, lanzador y menú de apagado
-{ config, osConfig, ... }:
+{
+  config,
+  osConfig,
+  pkgs,
+  ...
+}:
 let
   ipc = "noctalia msg";
 in
@@ -7,7 +12,6 @@ in
   programs.noctalia = {
     enable = true;
     settings = {
-      audio.enable_sounds = false;
       # Bloquea hyprlock (hypridle, ver hyprland.nix); si no, Noctalia se adelanta con su pantalla gris
       lockscreen.enabled = false;
 
@@ -135,7 +139,37 @@ in
 
       theme.builtin = "Catppuccin";
 
-      notification.layer = "overlay";
+      # Lo que pide acción en octobar (revisión, cambios pedidos, CI roto) suena y se queda
+      # hasta cerrarlo, el resto sin sonido. Gana el primer filtro que casa
+      notification = {
+        layer = "overlay";
+        filter = {
+          octobar_alert = {
+            match = "octobar.alert"; # categoría que pone octobar, no el nombre de la app
+            override_duration = 0;
+            play_sound = true;
+          };
+          quiet = {
+            match_content = ".";
+            play_sound = false;
+          };
+        };
+        filter_order = [
+          "octobar_alert"
+          "quiet"
+        ];
+      };
+      # El interruptor general también enciende los demás sonidos
+      audio = {
+        enable_sounds = true;
+        enable_notification_sounds = true;
+        enable_volume_sounds = false;
+        enable_power_sounds = false;
+        enable_screenshot_sounds = false;
+        sound_volume = 1.0; # a 0.5 no se oye con música
+        # Solo suenan las alertas de octobar: el tema cambia su sonido por bell, ver abajo
+        sound_theme = "alerts";
+      };
 
       osd = {
         enabled = true;
@@ -201,6 +235,22 @@ in
         };
       };
     };
+  };
+
+  # Tema de sonido de audio.sound_theme: freedesktop con bell como sonido de notificación,
+  # que message-new-instant no se oye con música
+  xdg.dataFile = {
+    "sounds/alerts/index.theme".text = ''
+      [Sound Theme]
+      Name=alerts
+      Inherits=freedesktop
+      Directories=stereo
+
+      [stereo]
+      OutputProfile=stereo
+    '';
+    "sounds/alerts/stereo/message-new-instant.oga".source =
+      "${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/bell.oga";
   };
 
   wayland.windowManager.hyprland.extraLuaFiles.noctalia = ''
