@@ -14,6 +14,8 @@
     environmentVariables = {
       OLLAMA_FLASH_ATTENTION = "1";
       OLLAMA_KV_CACHE_TYPE = "q8_0";
+      # KeyFling: la extensión de Chrome (ID fijo) y la de Firefox/LibreWolf (UUID aleatorio por instalación)
+      OLLAMA_ORIGINS = "chrome-extension://ijeigbclmiimeifflpecplahaodajcho,moz-extension://*";
     };
   };
   systemd.tmpfiles.rules = [ "d /data/ollama/models 0755 ollama ollama -" ];

@@ -13,6 +13,7 @@
     ./xdg.nix
     ./vigilante.nix
     ./sprint.nix
+    ./keyfling.nix
   ];
 
   home = {
