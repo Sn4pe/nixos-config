@@ -167,11 +167,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793878010,
-        "narHash": "sha256-x9TZLPIBni3AFun9yGq32wxPrLaCa1J/fl94T3AijFs=",
+        "lastModified": 1793880395,
+        "narHash": "sha256-3+m39+NxT5sVv1PfjcRw8F2ZQPlO+h9uKEjc6qpxIG4=",
         "owner": "Sn4pe",
         "repo": "hyprglance",
-        "rev": "b73b3d8134a566a8b903ac4177f6008e94ce2033",
+        "rev": "7c2ed46dacf7156392da62eabafe8f72f146ecaa",
         "type": "github"
       },
       "original": {
