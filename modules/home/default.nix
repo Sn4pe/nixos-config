@@ -8,6 +8,7 @@
     ./dev.nix
     ./shell.nix
     ./hyprland.nix
+    ./hyprglance.nix
     ./noctalia.nix
     ./firefox.nix
     ./xdg.nix

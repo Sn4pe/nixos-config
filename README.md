@@ -23,6 +23,7 @@ modules/home/             tu usuario (home-manager)
                           bat, eza, lazygit, lazydocker, git, direnv
   shell.nix               kitty, zsh, starship, alias
   hyprland.nix            atajos, monitor, fondo, decoración, capturas, portapapeles
+  hyprglance.nix          selector de ventanas y vista general (Sn4pe/hyprglance)
   noctalia.nix            barra, lanzador, notificaciones
   firefox.nix             uBlock, Bitwarden, sin telemetría
   xdg.nix                 apps por defecto, carpetas en castellano
@@ -135,6 +136,8 @@ Al entrar en la carpeta se carga solo; al salir, desaparece.
 | `Super + B` | Firefox |
 | `Ctrl + Alt + Supr` | Menú apagar / reiniciar |
 | `Super + Q` | Cerrar ventana |
+| `Super + Tab` / `+ Shift` | Selector de ventanas: suelta `Super` para cambiar |
+| `F3` | Vista general de ventanas y escritorios |
 | `Super + 1..0` / `+ Shift` | Ir a escritorio / mover ventana |
 | `Super + L` | Bloquear (también solo a los 10 min; pantalla apagada a los 15) |
 | `Super + Shift + E` | Salir de Hyprland |
@@ -146,6 +149,6 @@ Al entrar en la carpeta se carga solo; al salir, desaparece.
 
 - Tu nombre en git: `programs.git.settings.user.name` en `modules/home/dev.nix`.
 - AutoFirma: `kasane/programs/autofirma.nix` (input `autofirma-nix`).
-- Atajos tipo Mac (`Super` = `Cmd`): `Super+Tab`, `Super+W`, `Super+M/H` (ocultar), `Super+,` (ajustes de Noctalia),
+- Atajos tipo Mac (`Super` = `Cmd`): `Super+W`, `Super+M/H` (ocultar), `Super+,` (ajustes de Noctalia),
   `Super+Alt+Esc` (forzar cierre), `Super+Ctrl+←/→` (escritorios), scroll natural; capturas con
   `Super+Shift+3/4` (habría que mover "mover ventana" a `Super+Alt+número`) y `Super+C/V` en kitty.

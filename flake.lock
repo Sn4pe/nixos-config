@@ -160,6 +160,26 @@
         "type": "github"
       }
     },
+    "hyprglance": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793872657,
+        "narHash": "sha256-nTHrjt8JIorFbq713ZD4a7Vs3U9xhr/rtcdc5VU3vRU=",
+        "owner": "Sn4pe",
+        "repo": "hyprglance",
+        "rev": "e832d7fc1703ddfa9e3437c9b8fa9dd134f4def9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Sn4pe",
+        "repo": "hyprglance",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1793110635,
@@ -204,6 +224,7 @@
     "root": {
       "inputs": {
         "home-manager": "home-manager",
+        "hyprglance": "hyprglance",
         "nixpkgs": "nixpkgs",
         "secrets": "secrets",
         "stylix": "stylix"

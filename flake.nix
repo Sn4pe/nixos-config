@@ -9,6 +9,10 @@
       url = "github:nix-community/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    hyprglance = {
+      url = "github:Sn4pe/hyprglance";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # Repo privado con lo que no debe ir a este repo público (inventario OCS de AIR).
     # Como kadachi con kadachi-secrets; se descarga con la sesión de `gh`
     secrets = {
@@ -45,6 +49,7 @@
                 useUserPackages = true;
                 backupFileExtension = "bak";
                 extraSpecialArgs = { inherit user; };
+                sharedModules = [ inputs.hyprglance.homeManagerModules.default ];
                 users.${user} = ./modules/home;
               };
             }
