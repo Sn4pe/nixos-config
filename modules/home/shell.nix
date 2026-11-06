@@ -8,6 +8,8 @@
         enable_audio_bell = "no";
         window_padding_width = 8;
         scrollback_lines = 8000;
+        cursor_trail = 3;
+        cursor_trail_decay = "0.1 0.4";
       };
     };
 
