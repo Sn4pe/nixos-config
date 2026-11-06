@@ -463,9 +463,12 @@ in
         hl.bind("SUPER + SHIFT + E", hl.dsp.exec_cmd("uwsm stop"))
         hl.bind("SUPER + SHIFT + V", hl.dsp.exec_cmd("cliphist list | fuzzel --dmenu | cliphist decode | wl-copy"))
 
-        -- Captura de zona / pantalla completa → satty para anotar, copiar o guardar
-        hl.bind("Print", hl.dsp.exec_cmd([[grim -g "$(slurp)" - | satty --filename - --copy-command wl-copy --early-exit]]))
-        hl.bind("SHIFT + Print", hl.dsp.exec_cmd("grim - | satty --filename - --copy-command wl-copy --early-exit"))
+        -- Captura de zona / pantalla completa con accioshot: abre el editor, copia y guarda
+        hl.bind("Print", hl.dsp.exec_cmd([[accioshot capture region --edit --copy --save "$(xdg-user-dir PICTURES)/accioshot"]]))
+        hl.bind("SHIFT + Print", hl.dsp.exec_cmd([[accioshot capture screen --edit --copy --save "$(xdg-user-dir PICTURES)/accioshot"]]))
+        -- satty, deshabilitado mientras se prueba accioshot
+        -- hl.bind("Print", hl.dsp.exec_cmd([[grim -g "$(slurp)" - | satty --filename - --copy-command wl-copy --early-exit]]))
+        -- hl.bind("SHIFT + Print", hl.dsp.exec_cmd("grim - | satty --filename - --copy-command wl-copy --early-exit"))
 
         hl.bind("SUPER + left", hl.dsp.focus({ direction = "l" }))
         hl.bind("SUPER + right", hl.dsp.focus({ direction = "r" }))

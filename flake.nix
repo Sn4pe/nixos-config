@@ -13,6 +13,10 @@
       url = "github:Sn4pe/hyprglance";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    accioshot = {
+      url = "github:Sn4pe/accioshot";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # Repo privado con lo que no debe ir a este repo público (inventario OCS de AIR).
     # Como kadachi con kadachi-secrets; se descarga con la sesión de `gh`
     secrets = {
@@ -48,7 +52,7 @@
                 useGlobalPkgs = true;
                 useUserPackages = true;
                 backupFileExtension = "bak";
-                extraSpecialArgs = { inherit user; };
+                extraSpecialArgs = { inherit user inputs; };
                 sharedModules = [ inputs.hyprglance.homeManagerModules.default ];
                 users.${user} = ./modules/home;
               };

@@ -15,6 +15,7 @@
     ./vigilante.nix
     ./sprint.nix
     ./keyfling.nix
+    ./accioshot.nix
   ];
 
   home = {

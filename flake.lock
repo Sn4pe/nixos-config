@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "accioshot": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1793890751,
+        "narHash": "sha256-nFlAJl3MaWl0st2kJOuaETDccrwE8rYujnQeskrx0ps=",
+        "owner": "Sn4pe",
+        "repo": "accioshot",
+        "rev": "11172f01cd5ecb99016a6d3d0dc90414d7d0427e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Sn4pe",
+        "repo": "accioshot",
+        "type": "github"
+      }
+    },
     "base16": {
       "inputs": {
         "fromYaml": "fromYaml"
@@ -167,11 +187,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793880395,
-        "narHash": "sha256-3+m39+NxT5sVv1PfjcRw8F2ZQPlO+h9uKEjc6qpxIG4=",
+        "lastModified": 1793890474,
+        "narHash": "sha256-Od1BRSmOwRezewnZ1LnOwerq1haKs5xipaET4PsL3zE=",
         "owner": "Sn4pe",
         "repo": "hyprglance",
-        "rev": "7c2ed46dacf7156392da62eabafe8f72f146ecaa",
+        "rev": "fdd9392f7a465f0410b511a1122de03c8714e817",
         "type": "github"
       },
       "original": {
@@ -223,6 +243,7 @@
     },
     "root": {
       "inputs": {
+        "accioshot": "accioshot",
         "home-manager": "home-manager",
         "hyprglance": "hyprglance",
         "nixpkgs": "nixpkgs",
