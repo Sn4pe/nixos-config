@@ -1,4 +1,9 @@
-{ lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   # programs.git.hooks fija un core.hooksPath global que tapa .git/hooks de cada repo:
   # cada hook de aquí ejecuta también el del repo, si lo tiene
@@ -51,7 +56,6 @@ in
     jq
     bat
     eza
-    lazygit
     lazydocker
   ];
 
@@ -76,6 +80,24 @@ in
       ignores = [
         ".envrc"
         ".direnv/"
+      ];
+    };
+    # De kadachi (kasane/programs/git): diffs sintácticos con `git difftool` y en lazygit.
+    # En difftool y no en external para no cambiar la salida de `git diff`, que leen scripts y agentes
+    difftastic = {
+      enable = true;
+      git = {
+        enable = true;
+        mode = "difftool";
+      };
+    };
+    lazygit = {
+      enable = true;
+      settings.git.diffRenderers = [
+        {
+          type = "extDiff";
+          command = "${lib.getExe config.programs.difftastic.package} --color=always";
+        }
       ];
     };
     # Tras `gh auth login`, git usa esa sesión para push/pull por HTTPS
