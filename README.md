@@ -143,6 +143,8 @@ Al entrar en la carpeta se carga solo; al salir, desaparece.
 | `Super + Shift + E` | Salir de Hyprland |
 | `Impr Pant` / `Shift + Impr Pant` | Captura de zona / pantalla completa con accioshot (copia y guarda en `Imágenes/accioshot`) |
 | `Super + Shift + V` | Historial del portapapeles |
+| Teclas multimedia | Reproducir/pausar, anterior y siguiente (`playerctl`) |
+| `Shift + Silenciar` | Silenciar el micro |
 | `theme` | Cambiar tema claro / oscuro (también "Toggle theme" en el lanzador) |
 
 ## Pendiente para más adelante (está en kadachi)
