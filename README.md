@@ -141,7 +141,7 @@ Al entrar en la carpeta se carga solo; al salir, desaparece.
 | `Super + 1..0` / `+ Shift` | Ir a escritorio / mover ventana |
 | `Super + L` | Bloquear (también solo a los 10 min; pantalla apagada a los 15) |
 | `Super + Shift + E` | Salir de Hyprland |
-| `Impr Pant` / `Shift + Impr Pant` | Captura de zona / pantalla completa → satty (anotar, copiar, guardar) |
+| `Impr Pant` / `Shift + Impr Pant` | Captura de zona / pantalla completa con accioshot (copia y guarda en `Imágenes/accioshot`) |
 | `Super + Shift + V` | Historial del portapapeles |
 | `theme` | Cambiar tema claro / oscuro (también "Toggle theme" en el lanzador) |
 
