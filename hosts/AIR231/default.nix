@@ -9,6 +9,13 @@
     "${inputs.secrets}/AIR231/inventory.nix" # agente OCS de AIR; está en el repo privado
   ];
 
+  # Igual que /data (data.nix). Aquí y no en hardware-configuration.nix, que lo genera el instalador.
+  # Solo comprime lo que se escriba a partir de ahora
+  fileSystems."/".options = [
+    "noatime"
+    "compress=zstd"
+  ];
+
   # Que `nh clean` no borre el repo privado del store: el agente OCS lo evalúa a diario como root,
   # que no tiene la sesión de `gh` para volver a descargarlo
   system.extraDependencies = [ inputs.secrets ];
