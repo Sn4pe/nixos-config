@@ -499,6 +499,39 @@ in
           hl.config({ cursor = { zoom_factor = hl.get_config("cursor.zoom_factor") > 1 and 1 or 2 } })
         end)
       '';
+
+      # Modo presentación: al compartir un monitor o una zona, Slack y los avisos salen en negro y no se atenúa nada.
+      # Las capturas sí los ven: no_screen_share afecta a toda copia de pantalla, así que solo se activa al compartir
+      presentation = ''
+        local hideSlack = hl.window_rule({ match = { class = "^slack$" }, no_screen_share = true, enabled = false })
+        local hideNotifications = hl.layer_rule({ match = { namespace = "^noctalia-notification$" }, no_screen_share = true, enabled = false })
+
+        local shares, session = 0, 0
+
+        local function present(on)
+          hideSlack:set_enabled(on)
+          hideNotifications:set_enabled(on)
+          hl.config({ decoration = { dim_inactive = not on } })
+        end
+
+        -- El tipo 1 es compartir una sola ventana: ahí no se ve el resto del escritorio
+        hl.on("screenshare.state", function(active, kind)
+          if kind == 1 then return end
+          shares = math.max(shares + (active and 1 or -1), 0)
+          if shares == 0 then
+            session = session + 1
+            present(false)
+          elseif active and shares == 1 then
+            local current = session
+            -- Una captura también lanza el evento y acaba a los 500 ms: si sigue pasado este tiempo, es compartir
+            hl.timer(function()
+              if current ~= session then return end
+              present(true)
+              hl.exec_cmd('notify-send -a Hyprland "Compartiendo pantalla" "Slack y los avisos no se ven en lo que compartes"')
+            end, { timeout = 1500, type = "oneshot" })
+          end
+        end)
+      '';
     };
   };
 }
