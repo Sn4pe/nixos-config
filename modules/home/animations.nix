@@ -7,6 +7,9 @@
     hl.curve("almostLinear", { type = "bezier", points = { {0.5, 0.5}, {0.75, 1} } })
     hl.curve("quick",        { type = "bezier", points = { {0.15, 0}, {0.1, 1} } })
 
+    hl.curve("rubber",       { type = "spring", mass = 1, stiffness = 70, dampening = 10 })
+
+    hl.animation({ leaf = "zoomFactor", enabled = true, speed = 1,   spring = "rubber" })
     hl.animation({ leaf = "windows",    enabled = true, speed = 2.5, bezier = "easeOutQuint" })
     hl.animation({ leaf = "windowsIn",  enabled = true, speed = 2,   bezier = "easeOutQuint", style = "popin 87%" })
     hl.animation({ leaf = "windowsOut", enabled = true, speed = 1.2, bezier = "linear",       style = "popin 87%" })
