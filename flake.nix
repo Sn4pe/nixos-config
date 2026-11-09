@@ -17,6 +17,11 @@
       url = "github:Sn4pe/accioshot";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Local: github.com/Sn4pe/halo es privado y así no hacen falta credenciales al evaluar
+    halo = {
+      url = "git+file:///home/dfadon/Projects/halo";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # Repo privado con lo que no debe ir a este repo público (inventario OCS de AIR).
     # Como kadachi con kadachi-secrets; se descarga con la sesión de `gh`
     secrets = {

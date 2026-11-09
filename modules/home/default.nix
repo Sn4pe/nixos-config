@@ -16,6 +16,7 @@
     ./sprint.nix
     ./keyfling.nix
     ./accioshot.nix
+    ./halo.nix
   ];
 
   home = {

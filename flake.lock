@@ -160,6 +160,26 @@
         "type": "gitlab"
       }
     },
+    "halo": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1794232156,
+        "narHash": "sha256-wwKIynIRdHFWfKhWEsJPY8sBKWzVi51ihctrDuB911o=",
+        "ref": "refs/heads/main",
+        "rev": "0cdf0f599d80c3f403411dc72d7baec76c71a5f2",
+        "revCount": 1,
+        "type": "git",
+        "url": "file:///home/dfadon/Projects/halo"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///home/dfadon/Projects/halo"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -244,6 +264,7 @@
     "root": {
       "inputs": {
         "accioshot": "accioshot",
+        "halo": "halo",
         "home-manager": "home-manager",
         "hyprglance": "hyprglance",
         "nixpkgs": "nixpkgs",
