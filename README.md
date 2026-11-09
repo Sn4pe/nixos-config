@@ -145,6 +145,7 @@ Al entrar en la carpeta se carga solo; al salir, desaparece.
 | `Super + Shift + V` | Historial del portapapeles |
 | Teclas multimedia | Reproducir/pausar, anterior y siguiente (`playerctl`) |
 | `Shift + Silenciar` | Silenciar el micro |
+| `Super + Z` | Lupa alrededor del cursor |
 | `theme` | Cambiar tema claro / oscuro (también "Toggle theme" en el lanzador) |
 
 ## Pendiente para más adelante (está en kadachi)
