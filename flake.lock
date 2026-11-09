@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1793974714,
-        "narHash": "sha256-sIa5UOieZmxXUz9ZpwDjtvJpv4VhIanryG8JPkVHIRQ=",
+        "lastModified": 1794232956,
+        "narHash": "sha256-UokBAvhoY2EmvxI3Z6kVoqpImxEU7PsD6ef09aczXxM=",
         "owner": "Sn4pe",
         "repo": "accioshot",
-        "rev": "133f0d2f3dab67e0f2d619ee7fa2743d06243c39",
+        "rev": "26c938eb61ad1a180483cf45d37adc6c259f896a",
         "type": "github"
       },
       "original": {
