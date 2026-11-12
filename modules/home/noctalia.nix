@@ -260,6 +260,8 @@ in
 
     hl.bind("SUPER + D", hl.dsp.exec_cmd("${ipc} panel-toggle launcher"))
     hl.bind("SUPER + Space", hl.dsp.exec_cmd("${ipc} panel-toggle launcher"))
+    -- F4 del Keychron (dibujo de Launchpad), remapeada en su capa Win a "WWW Search"
+    hl.bind("XF86Search", hl.dsp.exec_cmd("${ipc} panel-toggle launcher"))
     hl.bind("CTRL + ALT + Delete", hl.dsp.exec_cmd("${ipc} panel-toggle session"))
     hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("${ipc} brightness-up"), { locked = true, repeating = true })
     hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("${ipc} brightness-down"), { locked = true, repeating = true })

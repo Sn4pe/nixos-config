@@ -487,6 +487,14 @@ in
         end)
       '';
 
+      # El Logitech trae Win y Alt al revés que el Keychron: así Super queda junto al espacio en los dos
+      devices = ''
+        hl.device({
+          name = "logitech-wireless-keyboard-pid:4023",
+          kb_options = "altwin:swap_lalt_lwin",
+        })
+      '';
+
       binds = ''
         hl.bind("SUPER + Return", hl.dsp.exec_cmd("uwsm app -- kitty"))
         hl.bind("SUPER + E", hl.dsp.exec_cmd("uwsm app -- pcmanfm-qt"))

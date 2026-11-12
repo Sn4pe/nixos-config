@@ -29,6 +29,11 @@
   # Firmware de Wi-Fi/Bluetooth/GPU y actualizaciones de BIOS/SSD con `fwupdmgr update`
   hardware.enableRedistributableFirmware = true;
   services.fwupd.enable = true;
+  # Acceso sin root al Keychron para remapearlo desde launcher.keychron.com o VIA
+  hardware.keyboard.qmk = {
+    enable = true;
+    keychronSupport = true;
+  };
 
   # Salud de los discos: aviso en el escritorio si SMART detecta fallos, y scrub mensual
   # de btrfs para encontrar corrupción silenciosa
