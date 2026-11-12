@@ -17,6 +17,7 @@
     ./keyfling.nix
     ./accioshot.nix
     ./halo.nix
+    ./neovim.nix
   ];
 
   home = {
