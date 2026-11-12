@@ -75,9 +75,14 @@ in
 
   systemd.user = {
     services.claude-desktop-check = {
-      Unit.Description = "Check for a new Claude Desktop version";
+      Unit = {
+        Description = "Check for a new Claude Desktop version";
+        # Reiniciado por rbd, esperaría el clic o mataría el nh os switch del "Update"
+        X-SwitchMethod = "keep-old";
+      };
       Service = {
-        Type = "oneshot";
+        # exec y no oneshot: arrancarlo no espera a que se conteste la notificación
+        Type = "exec";
         ExecStart = lib.getExe check;
       };
     };
