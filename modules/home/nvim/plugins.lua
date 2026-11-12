@@ -174,3 +174,13 @@ local is_not_ts_node_comment_one_back = function()
 end
 
 autopairs.add_rule(Rule("= ", ";", "nix"):with_pair(is_not_ts_node_comment_one_back()):set_end_pair_length(1))
+
+-- Spider: w, e, b y ge por subpalabras (camelCase, snake_case)
+local spider = require("spider")
+spider.setup({ subwordMovement = true })
+
+for _, motion in ipairs({ "w", "e", "b", "ge" }) do
+  vim.keymap.set({ "n", "o", "x" }, motion, function()
+    spider.motion(motion)
+  end)
+end

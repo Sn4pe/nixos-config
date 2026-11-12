@@ -58,6 +58,7 @@
       grug-far-nvim
       inc-rename-nvim
       nvim-autopairs
+      nvim-spider
       lualine-nvim
       mini-icons
       catppuccin-nvim
