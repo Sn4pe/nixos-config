@@ -77,6 +77,45 @@ let
     '';
   };
 
+  # El selector de serie (hyprland-share-picker 1.5.0) se cae y sin token de restauración Chrome se cuelga al pedir pantalla
+  sharePicker = pkgs.writeShellApplication {
+    name = "xdph-share-picker";
+    runtimeInputs = [ pkgs.fuzzel ];
+    text = ''
+      labels=()
+      picks=()
+
+      # XDPH_OUTPUT_SHARING_LIST: "8:HDMI-A-1:1920:0:1920:1080;..."
+      IFS=';' read -ra outputs <<< "''${XDPH_OUTPUT_SHARING_LIST:-}"
+      for output in "''${outputs[@]}"; do
+        IFS=: read -r _ name x y w h <<< "$output"
+        [ -n "$name" ] || continue
+        labels+=("Pantalla $name (''${w}x$h en $x,$y)")
+        picks+=("screen:$name")
+      done
+
+      # XDPH_WINDOW_SHARING_LIST: "id[HC>]clase[HT>]título[HE>]dirección[HA>]..."
+      windows=''${XDPH_WINDOW_SHARING_LIST:-}
+      while [[ $windows == *'[HA>]'* ]]; do
+        window=''${windows%%'[HA>]'*}
+        windows=''${windows#*'[HA>]'}
+        rest=''${window#*'[HC>]'}
+        title=''${rest#*'[HT>]'}
+        labels+=("Ventana ''${rest%%'[HT>]'*}: ''${title%'[HE>]'*}")
+        picks+=("window:''${window%%'[HC>]'*}")
+      done
+
+      # Sin salida el portal cancela. XDPH_PICKER_MENU cambia el menú (opciones por stdin, índice por stdout)
+      menu=(fuzzel --dmenu --index --prompt "Compartir: ")
+      [ -z "''${XDPH_PICKER_MENU:-}" ] || menu=("$XDPH_PICKER_MENU")
+      index=$(printf '%s\n' "''${labels[@]}" | "''${menu[@]}") || exit 0
+      if [[ $index =~ ^[0-9]+$ ]] && [ "$index" -lt "''${#picks[@]}" ]; then
+        # La r concede el token de restauración
+        echo "[SELECTION]r/''${picks[index]}"
+      fi
+    '';
+  };
+
   # Textos e imagen de la pantalla de bloqueo: `lock-info title|artist|cover|claude`.
   # Sin nada sonando, los textos salen vacíos y la carátula es un PNG transparente
   noCover = pkgs.runCommand "lock-no-cover.png" { } ''
@@ -341,6 +380,12 @@ in
   # Historial del portapapeles; se abre con Super+Shift+V
   services.cliphist.enable = true;
   programs.fuzzel.enable = true;
+
+  xdg.configFile."hypr/xdph.conf".text = ''
+    screencopy {
+      custom_picker_binary = ${lib.getExe sharePicker}
+    }
+  '';
 
   wayland.windowManager.hyprland = {
     enable = true;
