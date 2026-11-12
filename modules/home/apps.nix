@@ -7,6 +7,8 @@
     google-chrome
     # Agentes de código que siguen corriendo sin la app abierta, ver pkgs/herdr
     (callPackage ../../pkgs/herdr { })
+    # Slicer de las impresoras Bambu Lab, ver pkgs/bambu-studio
+    (callPackage ../../pkgs/bambu-studio { })
     # De kadachi: utilidades de escritorio
     pcmanfm-qt
     lxqt.lxqt-archiver
