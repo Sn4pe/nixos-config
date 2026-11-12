@@ -39,11 +39,18 @@ vim.keymap.set({ "n" }, "<leader>dp", getDiagnosticJumpFunction(-1), { desc = "G
 vim.keymap.set({ "n" }, "<leader>dn", getDiagnosticJumpFunction(1), { desc = "Go to next diagnostic" })
 
 -- Tools
-vim.keymap.set({ "n" }, "<leader>lg", function()
-  local buf = vim.api.nvim_create_buf(false, true)
-  utils.open_floating_window(buf, "lazygit")
-  vim.api.nvim_command(":terminal lazygit")
-end, { desc = "Open lazygit in a floating window" })
+vim.keymap.set({ "n" }, "<leader>lg", require("config.lazygit").open, { desc = "Open lazygit in a floating window" })
+
+-- Contexto para el agente
+vim.keymap.set("n", "<leader>yf", function()
+  utils.yank_path_with_line(":.")
+end, { desc = "Copy relative path#Lline" })
+vim.keymap.set("n", "<leader>yp", function()
+  utils.yank_path_with_line(":p")
+end, { desc = "Copy absolute path#Lline" })
+vim.keymap.set("x", "<leader>cc", "<Esc><Cmd>lua require('config.utils').copy_as_codeblock()<CR>", {
+  desc = "Copy selection as a Markdown code block",
+})
 
 -- Clipboard
 vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { desc = "Copy to system's clipboard" })

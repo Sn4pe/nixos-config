@@ -36,4 +36,21 @@ function M.open_floating_window(buf, title)
   })
 end
 
+-- Para pasarle contexto al agente: ruta#Llínea o la selección como bloque de código (de craftzdog/dotfiles)
+local function yank(text, msg)
+  vim.fn.setreg("+", text)
+  vim.notify(msg or ("Copiado: " .. text))
+end
+
+function M.yank_path_with_line(modifier)
+  yank(vim.fn.expand("%" .. modifier) .. "#L" .. vim.fn.line("."))
+end
+
+function M.copy_as_codeblock()
+  local first, last = vim.fn.line("'<"), vim.fn.line("'>")
+  local lines = vim.api.nvim_buf_get_lines(0, first - 1, last, false)
+  local header = "```" .. vim.bo.filetype .. ' filename="' .. vim.fn.expand("%:.") .. '" line=' .. first
+  yank(table.concat({ header, table.concat(lines, "\n"), "```" }, "\n"), "Copiadas " .. #lines .. " líneas como bloque")
+end
+
 return M

@@ -184,3 +184,30 @@ for _, motion in ipairs({ "w", "e", "b", "ge" }) do
     spider.motion(motion)
   end)
 end
+
+-- Revisar lo que cambia el agente (de craftzdog/dotfiles)
+local gitsigns = require("gitsigns")
+gitsigns.setup()
+vim.keymap.set("n", "<leader>gb", gitsigns.blame_line, { desc = "Blame current line" })
+vim.keymap.set("n", "<leader>gB", gitsigns.blame, { desc = "Blame buffer" })
+vim.keymap.set("n", "<leader>gh", gitsigns.stage_hunk, { desc = "Toggle stage hunk" })
+vim.keymap.set("n", "<leader>gs", function()
+  if #(gitsigns.get_hunks() or {}) > 0 then
+    gitsigns.stage_buffer()
+  else
+    gitsigns.reset_buffer_index()
+  end
+end, { desc = "Toggle stage buffer" })
+
+-- Con 'number' activo pinta los números de línea, así no choca con los signos de gitsigns
+local mini_diff = require("mini.diff")
+mini_diff.setup({ mappings = { goto_next = "]c", goto_prev = "[c" } })
+vim.keymap.set("n", "<leader>gd", mini_diff.toggle_overlay, { desc = "Toggle diff overlay" })
+
+require("codediff").setup({
+  explorer = { width = 50, view_mode = "tree" },
+  diff = { compact = true, compact_context_lines = 8, compact_sync_folds = true },
+})
+vim.keymap.set("n", "<leader>dv", "<cmd>CodeDiff<cr>", { desc = "Toggle CodeDiff" })
+vim.keymap.set("n", "<leader>dh", "<cmd>CodeDiff history %<cr>", { desc = "File history" })
+vim.keymap.set("n", "<leader>dH", "<cmd>CodeDiff history<cr>", { desc = "Repo history" })

@@ -32,10 +32,28 @@ vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "BufWinEnter", "WinEnte
 
 vim.api.nvim_create_autocmd({ "TermClose" }, {
   pattern = "term://*",
-  callback = function()
-    vim.api.nvim_input("<CR>")
+  callback = function(ev)
+    -- Fuera de la vista el ENTER caería en otro buffer. lazygit se cierra solo (config.lazygit)
+    if ev.buf == vim.api.nvim_get_current_buf() and not vim.b[ev.buf].lazygit then
+      vim.api.nvim_input("<CR>")
+    end
   end,
   desc = "Press ENTER when closing a terminal to skip the 'Process exited' text",
+})
+
+-- Recarga lo que cambie el agente por fuera, si el buffer no tiene cambios sin guardar
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
+  callback = function()
+    if vim.fn.getcmdwintype() == "" then
+      vim.cmd.checktime()
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd("TextYankPost", {
+  callback = function()
+    vim.hl.on_yank()
+  end,
 })
 
 -- Indentation

@@ -59,6 +59,9 @@
       inc-rename-nvim
       nvim-autopairs
       nvim-spider
+      gitsigns-nvim
+      mini-diff
+      codediff-nvim
       lualine-nvim
       mini-icons
       catppuccin-nvim

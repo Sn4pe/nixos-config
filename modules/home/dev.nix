@@ -93,6 +93,18 @@ in
     };
     lazygit = {
       enable = true;
+      # Dentro del <leader>lg de nvim ($NVIM), `e` cierra lazygit y abre el archivo en la ventana de origen
+      # en vez de un nvim anidado (ver nvim/lazygit.lua). Fuera de nvim, un nvim normal
+      settings.os =
+        let
+          remote = ''nvim --server "$NVIM"'';
+          inNvim = ''${remote} --remote-send q && ${remote} --remote-send '<Cmd>lua require("config.lazygit").focus_origin()<CR>' && ${remote} --remote {{filename}}'';
+        in
+        {
+          edit = ''if [ -z "$NVIM" ]; then nvim -- {{filename}}; else ${inNvim}; fi'';
+          editAtLine = ''if [ -z "$NVIM" ]; then nvim +{{line}} -- {{filename}}; else ${inNvim} && ${remote} --remote-send ':{{line}}<CR>'; fi'';
+          editInTerminal = true; # fuera de nvim, nvim necesita la terminal
+        };
       settings.git.diffRenderers = [
         {
           type = "extDiff";

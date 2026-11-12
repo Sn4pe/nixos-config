@@ -36,3 +36,28 @@ vim.diagnostic.config({
     },
   },
 })
+
+-- De craftzdog/dotfiles
+vim.o.scrolloff = 10
+vim.o.ignorecase = true
+vim.o.smartcase = true
+vim.o.undofile = true
+vim.opt.fillchars:append("diff:╱")
+
+-- Mensajes en ventana flotante (con cmdheight = 0 si no se pierden). Errores y salidas largas, en el pager
+require("vim._core.ui2").enable({
+  msg = {
+    target = "msg",
+    targets = {
+      emsg = "pager",
+      echoerr = "pager",
+      lua_error = "pager",
+      list_cmd = "pager",
+      shell_out = "pager",
+      shell_err = "pager",
+      verbose = "pager",
+    },
+    msg = { height = 0.3, timeout = 5000 },
+    pager = { height = 0.5 },
+  },
+})
