@@ -7,11 +7,6 @@
     google-chrome
     # Agentes de código que siguen corriendo sin la app abierta, ver pkgs/herdr
     (callPackage ../../pkgs/herdr { })
-    # Cliente de Ollama: en Preferencias, instancia remota http://127.0.0.1:11434.
-    # shortcut: el paquete de nixpkgs no trae pandas y no arranca, quitar cuando lo arreglen
-    (alpaca.overridePythonAttrs (o: {
-      dependencies = o.dependencies ++ [ python3Packages.pandas ];
-    }))
     # De kadachi: utilidades de escritorio
     pcmanfm-qt
     lxqt.lxqt-archiver

@@ -13,9 +13,12 @@
       url = "github:Sn4pe/hyprglance";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # shortcut: nixpkgs fijado porque el nuevo exporta AWS_LC_SYS_USE_SYSTEM=1 y accioshot no trae aws-lc,
+    # quitar cuando accioshot lo añada a buildInputs
+    nixpkgs-accioshot.url = "github:nixos/nixpkgs/31ecbaca1bdefa45dffc409f0250bd8039ea0010";
     accioshot = {
-      url = "github:Sn4pe/accioshot";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:Sn4pe/accioshot/v0.2.0";
+      inputs.nixpkgs.follows = "nixpkgs-accioshot";
     };
     # Local: github.com/Sn4pe/halo es privado y así no hacen falta credenciales al evaluar
     halo = {
