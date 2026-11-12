@@ -16,12 +16,12 @@
 let
   # Versiones y hashes de releases.herdr.dev/{app,core}/latest.json
   app = {
-    version = "0.1.12";
-    hash = "sha256-omXmySXEh0WEBnQf+gnS+g09S9QBo07YwBwzYQjlfB8=";
+    version = "0.1.14";
+    hash = "sha256-R1o4P49DnjGRqGY1tcEobOTf0tn83x58vf3Wxxdvj/M=";
   };
   core = {
-    version = "0.1.17";
-    hash = "sha256-guxEBD9olL/bcWuXm4fNpD/X+kawEE57e9k+ZNGpuHc=";
+    version = "0.1.19";
+    hash = "sha256-Stz7Qj1S8kxcxKHizS/K0fYtKLt3h2rEcsKQgqPqpCQ=";
   };
 
   coreSrc = fetchurl {
