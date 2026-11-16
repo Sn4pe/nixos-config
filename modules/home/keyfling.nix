@@ -4,9 +4,9 @@
 let
   repo = "${config.home.homeDirectory}/Projects/keyfling";
 
-  # El adaptador de Claude usa el binario de Nix, no el que trae el SDK de npm
+  # El adaptador de Claude usa el claude nativo, no el que trae el SDK de npm
   host = pkgs.writeShellScript "keyfling-host" ''
-    export CLAUDE_CODE_EXECUTABLE=${lib.getExe config.programs.claude-code.package}
+    export CLAUDE_CODE_EXECUTABLE=${config.home.homeDirectory}/.local/bin/claude
     exec ${pkgs.nodejs_24}/bin/node ${repo}/host/keyfling-host.js "$@"
   '';
 

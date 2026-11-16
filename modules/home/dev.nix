@@ -59,10 +59,13 @@ in
     lazydocker
   ];
 
+  home.sessionPath = [ "$HOME/.local/bin" ];
+
   programs = {
-    # Instala claude-code y le registra los servidores MCP (plugin "hm")
+    # Solo registra los MCP (plugin "hm"). claude es el nativo de ~/.local/bin, que necesita nix-ld
     claude-code = {
       enable = true;
+      package = null;
       mcpServers.nixos.command = lib.getExe pkgs.mcp-nixos;
     };
     git = {
