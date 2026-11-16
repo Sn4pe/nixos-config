@@ -31,6 +31,7 @@
       '';
       shellAliases = {
         rbd = "nh os switch";
+        ls = "eza --icons=auto";
       };
     };
 
