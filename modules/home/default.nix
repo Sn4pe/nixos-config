@@ -11,6 +11,7 @@
     ./hyprglance.nix
     ./noctalia.nix
     ./firefox.nix
+    ./zen.nix
     ./xdg.nix
     ./vigilante.nix
     ./sprint.nix
