@@ -305,6 +305,7 @@
         "nixpkgs-accioshot": "nixpkgs-accioshot",
         "secrets": "secrets",
         "stylix": "stylix",
+        "wordle-es": "wordle-es",
         "zen-browser": "zen-browser"
       }
     },
@@ -435,6 +436,22 @@
         "owner": "tinted-theming",
         "repo": "base16-zed",
         "type": "github"
+      }
+    },
+    "wordle-es": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1795163523,
+        "narHash": "sha256-PSroFk/4skWQfa3a6pfHPJSBk8iECMGnEeBZnFcHiGg=",
+        "ref": "refs/heads/main",
+        "rev": "d667e82f1f87b8216924cdf956fdb03dcf2d30e3",
+        "revCount": 2,
+        "type": "git",
+        "url": "file:///home/dfadon/Projects/wordle-es"
+      },
+      "original": {
+        "type": "git",
+        "url": "file:///home/dfadon/Projects/wordle-es"
       }
     },
     "zen-browser": {

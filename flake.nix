@@ -34,6 +34,10 @@
       url = "git+file:///home/dfadon/Projects/halo";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    wordle-es = {
+      url = "git+file:///home/dfadon/Projects/wordle-es";
+      flake = false;
+    };
     # Repo privado con lo que no debe ir a este repo público (inventario OCS de AIR).
     # Como kadachi con kadachi-secrets; se descarga con la sesión de `gh`
     secrets = {

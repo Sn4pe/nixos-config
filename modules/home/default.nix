@@ -18,6 +18,7 @@
     ./keyfling.nix
     ./accioshot.nix
     ./halo.nix
+    ./wordle-es.nix
     ./neovim.nix
   ];
 
