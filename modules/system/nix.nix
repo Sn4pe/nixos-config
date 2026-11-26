@@ -39,4 +39,10 @@
       libsecret
     ];
   };
+
+  # Lanza los AppImage descargados directamente, sin anteponer appimage-run
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+  };
 }
